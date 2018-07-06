@@ -253,7 +253,7 @@ namespace {
         }
         abis.set_abi(abi);
         chain_plugin* chain_plug = app().find_plugin<chain_plugin>();
-        auto v = abis.binary_to_variant(abis.get_action_type(msg.name), msg.data, chain_plug.chain().get_abi_serializer_max_time_ms());
+        auto v = abis.binary_to_variant(abis.get_action_type(msg.name), msg.data, chain_plug->get_abi_serializer_max_time());
         auto json = fc::json::to_string(v);
         try {
            const auto& value = bsoncxx::from_json(json);
@@ -640,7 +640,7 @@ void mongo_db_plugin_impl::update_account(const chain::action& msg) {
       auto abi = fc::json::from_string(bsoncxx::to_json(eosio_account.view()["abi"].get_document())).as<abi_def>();
       abis.set_abi(abi);
       chain_plugin* chain_plug = app().find_plugin<chain_plugin>();
-      auto transfer = abis.binary_to_variant(abis.get_action_type(msg.name), msg.data, chain_plug.chain().get_abi_serializer_max_time_ms());
+      auto transfer = abis.binary_to_variant(abis.get_action_type(msg.name), msg.data, chain_plug->get_abi_serializer_max_time());
       auto from_name = transfer["from"].as<name>().to_string();
       auto to_name = transfer["to"].as<name>().to_string();
       auto from_account = find_account(accounts, from_name);
