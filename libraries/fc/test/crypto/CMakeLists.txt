@@ -1,3 +1,6 @@
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 add_executable( test_cypher_suites test_cypher_suites.cpp )
 target_link_libraries( test_cypher_suites fc )
 

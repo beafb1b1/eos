@@ -253,35 +253,37 @@ mongodconf
 			printf "\\n\\tExiting now.\\n\\n"
 			exit 1;
 		fi
-		STATUS=$(curl -LO -w '%{http_code}' --connect-timeout 30 https://github.com/mongodb/mongo-c-driver/releases/download/1.9.3/mongo-c-driver-1.9.3.tar.gz)
+		MONGO_C_DRIVER_VERSION=1.13.1
+		STATUS=$(curl -LO -w '%{http_code}' --connect-timeout 30 https://github.com/mongodb/mongo-c-driver/releases/download/${MONGO_C_DRIVER_VERSION}/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.tar.gz)
 		if [ "${STATUS}" -ne 200 ]; then
-			if ! rm -f "${TEMP_DIR}/mongo-c-driver-1.9.3.tar.gz"
+			if ! rm -f "${TEMP_DIR}/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.tar.gz"
 			then
-				printf "\\n\\tUnable to remove file %s/mongo-c-driver-1.9.3.tar.gz.\\n" "${TEMP_DIR}"
+				printf "\\n\\tUnable to remove file %s/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.tar.gz.\\n" "${TEMP_DIR}"
 			fi
 			printf "\\tUnable to download MongoDB C driver at this time.\\n"
 			printf "\\tExiting now.\\n\\n"
 			exit 1;
 		fi
-		if ! tar xf "${TEMP_DIR}/mongo-c-driver-1.9.3.tar.gz"
+		if ! tar xf "${TEMP_DIR}/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.tar.gz"
 		then
-			printf "\\n\\tUnable to unarchive file %s/mongo-c-driver-1.9.3.tar.gz.\\n" "${TEMP_DIR}"
+			printf "\\n\\tUnable to unarchive file %s/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.tar.gz.\\n" "${TEMP_DIR}"
 			printf "\\n\\tExiting now.\\n\\n"
 			exit 1;
 		fi
-		if ! rm -f "${TEMP_DIR}/mongo-c-driver-1.9.3.tar.gz"
+		if ! rm -f "${TEMP_DIR}/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.tar.gz"
 		then
-			printf "\\n\\tUnable to remove file %s/mongo-c-driver-1.9.3.tar.gz.\\n" "${TEMP_DIR}"
+			printf "\\n\\tUnable to remove file %s/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.tar.gz.\\n" "${TEMP_DIR}"
 			printf "\\n\\tExiting now.\\n\\n"
 			exit 1;
 		fi
-		if ! cd "${TEMP_DIR}/mongo-c-driver-1.9.3"
+		if ! cd "${TEMP_DIR}/mongo-c-driver-${MONGO_C_DRIVER_VERSION}"
 		then
-			printf "\\n\\tUnable to enter directory %s/mongo-c-driver-1.9.3.\\n" "${TEMP_DIR}"
+			printf "\\n\\tUnable to enter directory %s/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.\\n" "${TEMP_DIR}"
 			printf "\\n\\tExiting now.\\n\\n"
 			exit 1;
 		fi
-		if ! ./configure --enable-static --with-libbson=bundled --enable-ssl=openssl --disable-automatic-init-and-cleanup --prefix=/usr/local
+		# if ! ./configure --enable-static --with-libbson=bundled --enable-ssl=openssl --disable-automatic-init-and-cleanup --prefix=/usr/local
+		if ! cmake . -DENABLE_SSL=OPENSSL -DENABLE_STATIC=ON -DENABLE_BSON=AUTO -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DCMAKE_INSTALL_PREFIX:PATH=/usr/local
 		then
 			printf "\\tConfiguring MongoDB C driver has encountered the errors above.\\n"
 			printf "\\n\\tExiting now.\\n\\n"
@@ -305,9 +307,9 @@ mongodconf
 			printf "\\n\\tExiting now.\\n\\n"
 			exit 1;
 		fi
-		if ! rm -rf "${TEMP_DIR}/mongo-c-driver-1.9.3"
+		if ! rm -rf "${TEMP_DIR}/mongo-c-driver-${MONGO_C_DRIVER_VERSION}"
 		then
-			printf "\\n\\tUnable to remove directory %s/mongo-c-driver-1.9.3.\\n" "${TEMP_DIR}"
+			printf "\\n\\tUnable to remove directory %s/mongo-c-driver-${MONGO_C_DRIVER_VERSION}.\\n" "${TEMP_DIR}"
 			printf "\\n\\tExiting now.\\n\\n"
 			exit 1;
 		fi
