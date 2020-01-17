@@ -1,3 +1,4 @@
+# docker build . -f Docker/vmie/eos-cli-Dockerfile -t eos-cli
 FROM eos-builder as builder
 ARG branch=master
 ARG symbol=SYS
