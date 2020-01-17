@@ -4,7 +4,8 @@
 
 ```shell
 docker-compose up -d
-alias cleos='docker-compose exec keosd /opt/eosio/bin/cleos -u http://nodeosd:8888 --wallet-url http://localhost:8888'
+alias cleos='docker-compose exec keosd cleos -u http://nodeosd:8888 --wallet-url http://localhost:8888'
+alias eosio-cpp='docker run -i -t --rm -v ${PWD}:/mnt -w /mnt eos-cdt eosio-cpp'
 ```
 
 ## Create a wallet
