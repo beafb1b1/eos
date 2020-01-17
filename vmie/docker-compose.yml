@@ -5,6 +5,11 @@ services:
     build:
       context: builder
     image: eos-builder
+  
+  cdt:
+    build:
+      context: cdt
+    image: eos-cdt
 
   nodeosd:
     build:
@@ -25,10 +30,16 @@ services:
     image: eos-cli
     command: /opt/eosio/bin/keosd --wallet-dir /opt/eosio/bin/data-dir
     hostname: keosd
+    ports:
+      - 8889:8888
     links:
       - nodeosd
+    expose:
+      - "8888"
     volumes:
       - keosd-data-volume:/opt/eosio/bin/data-dir
+      - ${PWD}/poc:/mnt
+    working_dir: /mnt
 
 volumes:
   nodeos-data-volume:
