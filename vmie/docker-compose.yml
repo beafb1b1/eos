@@ -8,7 +8,7 @@ services:
 
   nodeosd:
     build:
-      context: ../../
+      context: ../
       dockerfile: Docker/vmie/eos-cli-Dockerfile
     image: eos-cli
     command: /opt/eosio/bin/nodeosd.sh --data-dir /opt/eosio/bin/data-dir
