@@ -69,9 +69,10 @@ std::unique_ptr<wasm_instantiated_module_interface> binaryen_runtime::instantiat
          globals[global->name] = ConstantExpressionRunner<TrivialGlobalManager>(globals).visit(global->init).value;
       }
 
-      call_indirect_table_type table;
-      table.resize(module->table.initial);
+      call_indirect_table_type table;  // table is a std::vector contains the names in the function table
+      table.resize(module->table.initial); // table.initial is read from the function declaration section in the wasm file.
       for (auto& segment : module->table.segments) {
+         // offset also from wasm file, 所以是文件中的哪个字段？
          Address offset = ConstantExpressionRunner<TrivialGlobalManager>(globals).visit(segment.offset).value.geti32();
          assert(offset + segment.data.size() <= module->table.initial);
          for (size_t i = 0; i != segment.data.size(); ++i) {
