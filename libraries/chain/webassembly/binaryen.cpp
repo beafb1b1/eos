@@ -54,6 +54,8 @@ binaryen_runtime::binaryen_runtime() {
 
 }
 
+#define DEBUG_PRINT(name) {std::cout << "\ndebug, " << #name << name << std::endl;}
+
 std::unique_ptr<wasm_instantiated_module_interface> binaryen_runtime::instantiate_module(const char* code_bytes, size_t code_size, std::vector<uint8_t> initial_memory) {
    try {
       vector<char> code(code_bytes, code_bytes + code_size);
@@ -71,6 +73,7 @@ std::unique_ptr<wasm_instantiated_module_interface> binaryen_runtime::instantiat
 
       call_indirect_table_type table;  // table is a std::vector contains the names in the function table
       table.resize(module->table.initial); // table.initial is read from the function declaration section in the wasm file.
+      DEBUG_PRINT(module->table.initial);
       for (auto& segment : module->table.segments) {
          // offset also from wasm file, 所以是文件中的哪个字段？
          Address offset = ConstantExpressionRunner<TrivialGlobalManager>(globals).visit(segment.offset).value.geti32();
