@@ -54,7 +54,7 @@ binaryen_runtime::binaryen_runtime() {
 
 }
 
-#define DEBUG_PRINT(name) {std::cout << "\ndebug, " << #name << name << std::endl;}
+#define DEBUG_PRINT(name) {std::cout << "\ndebug, " << #name << "=" << name << std::endl;}
 
 std::unique_ptr<wasm_instantiated_module_interface> binaryen_runtime::instantiate_module(const char* code_bytes, size_t code_size, std::vector<uint8_t> initial_memory) {
    try {
@@ -77,6 +77,7 @@ std::unique_ptr<wasm_instantiated_module_interface> binaryen_runtime::instantiat
       for (auto& segment : module->table.segments) {
          // offset also from wasm file, 所以是文件中的哪个字段？
          Address offset = ConstantExpressionRunner<TrivialGlobalManager>(globals).visit(segment.offset).value.geti32();
+         DEBUG_PRINT(offset);
          assert(offset + segment.data.size() <= module->table.initial);
          for (size_t i = 0; i != segment.data.size(); ++i) {
             table[offset + i] = segment.data[i];

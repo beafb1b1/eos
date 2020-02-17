@@ -3,7 +3,7 @@
 set -e
 # apt update && apt install -y curl
 
-keosd --http-server-address=127.0.0.1:9999 &
+keosd --http-server-address=127.0.0.1:9999 > /dev/null 2>&1 &
 
 nodeos -e -p eosio \
     --http-server-address=127.0.0.1:8888 \
@@ -22,7 +22,7 @@ cleos_cmd() {
     cleos -u http://localhost:8888 --wallet-url http://localhost:9999 $@
 }
 
-sleep 0.5
+sleep 1
 
 password=$(cleos_cmd wallet create | tail -n1 | tr -d '"')
 
@@ -36,6 +36,7 @@ cleos_cmd create account eosio alice ${pubkey}
 
 cleos_cmd set contract alice poc/callindirect/ -p alice@active
 cleos_cmd push action alice hi '["alice"]' -p alice@active
+bash
 
 # cleos -u http://localhost:8888 --wallet-url http://localhost:9999 $@
 # curl http://localhost:8888/v1/chain/get_info
