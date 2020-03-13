@@ -10,10 +10,12 @@ import subprocess
 import sys
 import time
 
+# import change_timestamp
+
 args = None
 logFile = None
 
-unlockTimeout = 99999999999
+unlockTimeout = 0xFFFFFFFF
 fastUnstakeSystem = './fast.refund/eosio.system/eosio.system.wasm'
 
 systemAccounts = [
@@ -35,9 +37,12 @@ def jsonArg(a):
 def run(args):
     print('bios-boot-tutorial.py:', args)
     logFile.write(args + '\n')
-    if subprocess.call(args, shell=True):
+    try:
+        process = subprocess.run(args, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
         print('bios-boot-tutorial.py: exiting because of error')
         sys.exit(1)
+    return process
 
 def retry(args):
     while True:
@@ -116,6 +121,7 @@ def startNode(nodeIndex, account):
         '    --p2p-listen-endpoint 127.0.0.1:' + str(9000 + nodeIndex) +
         '    --max-clients ' + str(maxClients) +
         '    --enable-stale-production'
+        '    --max-irreversible-block-age 99999999'
         '    --producer-name ' + account['name'] +
         '    --private-key \'["' + account['pub'] + '","' + account['pvt'] + '"]\''
         '    --plugin eosio::http_plugin'
@@ -147,7 +153,7 @@ def fillStake(b, e):
         stake = round(factor * dist[i - b] * 10000 / 2)
         if i >= firstProducer and i < firstProducer + numProducers:
             stake = max(stake, round(args.min_producer_stake * 10000))
-        total += stake * 2
+        total += stake * 3
         accounts[i]['stake'] = stake
     return total + round(args.extra_issue * 10000)
 
@@ -155,7 +161,8 @@ def createStakedAccounts(b, e):
     for i in range(b, e):
         a = accounts[i]
         stake = intToCurrency(a['stake'])
-        run(args.cleos + 'system newaccount eosio --transfer ' + a['name'] + ' ' + a['pub'] + ' --stake-net "' + stake + '" --stake-cpu "' + stake + '"')
+        # 这里貌似少买了ram
+        run(args.cleos + 'system newaccount eosio --transfer ' + a['name'] + ' ' + a['pub'] + ' --stake-net "' + stake + '" --stake-cpu "' + stake + '"' + ' --buy-ram-EOS "' + stake + '"')
 
 def regProducers(b, e):
     for i in range(b, e):

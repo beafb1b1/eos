@@ -26,7 +26,12 @@
         {
             "name": "setmem",
             "base": "",
-            "fields": []
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                }
+            ]
         }
     ],
     "actions": [

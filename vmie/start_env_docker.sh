@@ -11,12 +11,12 @@ rm -rf .nodeos/
 
 echo "[!] Start keosd..."
 mkdir .keosd && \
-keosd --http-server-address=127.0.0.1:9999 \
+../build/programs/keosd/keosd --http-server-address=127.0.0.1:9999 \
     -d .keosd \
     > /dev/null 2>&1 &
 
 echo "[!] Start nodeos..."
-nodeos -e -p eosio \
+../build/programs/nodeos/nodeos -e -p eosio \
     -d .nodeos/ \
     --http-server-address=127.0.0.1:8888 \
     --plugin eosio::producer_plugin \
@@ -27,13 +27,14 @@ nodeos -e -p eosio \
     --plugin eosio::history_plugin \
     --plugin eosio::history_api_plugin \
     --filter-on="*" \
+    --max-transaction-time 1000000000 \
     --access-control-allow-origin='*' \
     --contracts-console >> nodeos.log 2>&1 &
 
 read -n1 -r -p "Press any key to continue..." key
 
 cleos_cmd() {
-    cleos -u http://localhost:8888 --wallet-url http://localhost:9999 $@
+    ../build/programs/cleos/cleos -u http://localhost:8888 --wallet-url http://localhost:9999 $@
 }
 
 sleep 1
@@ -47,11 +48,13 @@ cleos_cmd wallet unlock << EOF
 $password
 EOF
 
+cleos_cmd wallet list
+
 pubkey=$(cleos_cmd wallet create_key | grep -Eo 'EOS\w+')
 cleos_cmd create account eosio alice ${pubkey}
 
 cleos_cmd set contract alice poc/growmemory/ -p alice@active
-# cleos_cmd push action alice setmem '[]' -p alice@active
+cleos_cmd push action alice setmem '['bob']' -p alice@active || true
 cleos_cmd push action alice readmem '[]' -p alice@active
 cleos_cmd push action alice insert '['alice']' -p alice@active
 # bash

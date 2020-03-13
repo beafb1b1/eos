@@ -17,9 +17,10 @@ class growmemory : public eosio::contract
 
 
     [[eosio::action]]
-    void setmem() {
+    void setmem(name user) {
       char* buf = (char*)malloc(0x30000);
       buf[0x20000] = 0x42;
+      require_auth(user);
     }
 
     [[eosio::action]]
