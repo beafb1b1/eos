@@ -52,11 +52,14 @@ cleos_cmd wallet list
 
 pubkey=$(cleos_cmd wallet create_key | grep -Eo 'EOS\w+')
 cleos_cmd create account eosio alice ${pubkey}
+pubkey=$(cleos_cmd wallet create_key | grep -Eo 'EOS\w+')
+cleos_cmd create account eosio bob ${pubkey}
 
 cleos_cmd set contract alice poc/growmemory/ -p alice@active
-cleos_cmd push action alice setmem '['bob']' -p alice@active || true
-cleos_cmd push action alice readmem '[]' -p alice@active
+# cleos_cmd push action alice setmem '['bob']' -p alice@active || true
+# cleos_cmd push action alice readmem '[]' -p alice@active
 cleos_cmd push action alice insert '['alice']' -p alice@active
+# cleos_cmd push action alice dotransfer "['alice', 'bob']" -p alice@active
 # bash
 
 # cleos -u http://localhost:8888 --wallet-url http://localhost:9999 $@

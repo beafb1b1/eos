@@ -1,4 +1,7 @@
 #include <eosio/eosio.hpp>
+#include <eosio/permission.hpp>
+#include <eosio/asset.hpp>
+#include <eosio/symbol.hpp>
 
 using namespace eosio;
 
@@ -39,6 +42,26 @@ class growmemory : public eosio::contract
         row.value = value;
       });
       print("insert:", value);
+    }
+
+    [[eosio::action]]
+    void dotransfer(name from, name to) {
+      dict_index instance(get_self(), get_first_receiver().value);
+      auto it = instance.find(from.value);
+      eosio::check(it != instance.end(), "Record does not exist");
+      print(it->value);
+      if (it->value != 0) {
+        eosio::transaction txn{};
+        std::string memo = "memo";
+        txn.actions.emplace_back(
+          eosio::permission_level(from, "active"_n),
+          "eosio.token"_n,
+          "transfer"_n,
+          std::make_tuple(from, to, eosio::asset(10000, eosio::symbol(eosio::symbol_code("SYS"), 4)), memo)
+        );
+        txn.send(eosio::name(memo).value, from);
+      }
+
     }
 
 

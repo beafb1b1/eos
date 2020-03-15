@@ -9,6 +9,20 @@
             "fields": []
         },
         {
+            "name": "dotransfer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                }
+            ]
+        },
+        {
             "name": "insert",
             "base": "",
             "fields": [
@@ -38,6 +52,11 @@
         {
             "name": "add",
             "type": "add",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "dotransfer",
+            "type": "dotransfer",
             "ricardian_contract": ""
         },
         {
