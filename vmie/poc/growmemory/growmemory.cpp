@@ -34,10 +34,14 @@ class growmemory : public eosio::contract
 
     [[eosio::action]]
     void insert(name user) {
-      dict_index instace(get_self(), get_first_receiver().value);
+      dict_index instance(get_self(), get_first_receiver().value);
       char* buf = (char*)malloc(0x30000);
       int value = buf[0x20000];
-      instace.emplace(user, [&](auto& row) {
+      auto it = instance.find(user.value);
+      if (it != instance.end()) {
+        instance.erase(it);
+      }
+      instance.emplace(user, [&](auto& row) {
         row.key = user;
         row.value = value;
       });
@@ -51,6 +55,7 @@ class growmemory : public eosio::contract
       eosio::check(it != instance.end(), "Record does not exist");
       print(it->value);
       if (it->value != 0) {
+        print("!!!!!!!! transfer !!!!!!!");
         eosio::transaction txn{};
         std::string memo = "memo";
         txn.actions.emplace_back(

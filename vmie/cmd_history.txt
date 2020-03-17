@@ -1,0 +1,7 @@
+ 3644  ../../build/programs/cleos/cleos --wallet-url http://localhost:6666 --url http://localhost:8002 push action useraaaaaaaa setmem  '["bob"]'  -p useraaaaaaaa@active
+ 3645  ../../build/programs/cleos/cleos --wallet-url http://localhost:6666 --url http://localhost:8002  push action useraaaaaaaa readmem '[]' -p useraaaaaaaa@active
+ 3646  ../../build/programs/cleos/cleos --wallet-url http://localhost:6666 --url http://localhost:8002  push action useraaaaaaaa insert  '["useraaaaaaaa"]'  -p useraaaaaaaa@active
+ 3647  ../../build/programs/cleos/cleos --wallet-url http://localhost:6666 --url http://localhost:8002  push action useraaaaaaaa dotransfer  '["useraaaaaaaa", "useraaaaaaab"]'  -p useraaaaaaaa@active
+ 3648  ../../build/programs/cleos/cleos --wallet-url http://localhost:6666 --url http://localhost:8001 get table eosio.token useraaaaaaaa accounts
+ 3649  ../../build/programs/cleos/cleos --wallet-url http://localhost:6666 --url http://localhost:8002 get table eosio.token useraaaaaaaa accounts
+ 3650  ../../build/programs/cleos/cleos --wallet-url http://localhost:6666 --url http://localhost:8003 get table eosio.token useraaaaaaaa accounts

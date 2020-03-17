@@ -1,0 +1,52 @@
+[
+	{
+		"path": "$ROOTPATH$/libraries/chain/include/eosio/chain/webassembly/binaryen.hpp",
+		"bookmarks": [
+			{
+				"line": 115,
+				"column": 65,
+				"label": ""
+			},
+			{
+				"line": 346,
+				"column": 81,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/libraries/chain/include/eosio/chain/wasm_interface_private.hpp",
+		"bookmarks": [
+			{
+				"line": 114,
+				"column": 42,
+				"label": ""
+			},
+			{
+				"line": 120,
+				"column": 51,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/libraries/chain/fork_database.cpp",
+		"bookmarks": [
+			{
+				"line": 153,
+				"column": 106,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/libraries/chain/controller.cpp",
+		"bookmarks": [
+			{
+				"line": 809,
+				"column": 61,
+				"label": ""
+			}
+		]
+	}
+]
